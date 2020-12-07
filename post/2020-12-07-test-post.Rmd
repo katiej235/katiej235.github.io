@@ -1,0 +1,29 @@
+---
+title: Test Post
+author: ''
+date: '2020-12-07'
+slug: test-post
+categories: []
+tags: []
+description: ''
+---
+
+<center>
+![](/post/2020-12-07-test-post_files/Me.png){width=50%}
+</center>
+
+#Heading of my post
+
+Content of my post
+
+## subheading
+
+more content
+
+```{r}
+quakes <- quakes
+```
+
+```{python}
+r.quakes.mag.mean()
+```

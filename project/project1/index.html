@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Katie Jang" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>SDS348 Project 1</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project1/">SDS348 Project 1</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         December 3, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<link href="../../rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>Introduction: The two data I have chosen both deal with women participating in the labor force from carData. I thought this would be interesting to see the factors that impact women's participation in labor force. I expect that not having children would increase the rate of labor force participation, and an increased participation when husband's income is lower.<br />
+The Mroz data frame has 753 rows and 8 columns, and the observations, from the Panel Study of Income Dynamics, are married women. This data includes whether or not women participated in the labor force, their age, the number of children they have, their income, their college attendace, their husband's income,and the log expected wage rate. The Womenlf data frame has 263 rows and 4 columns, and the data are from a 1977 survey of the Canadian population. This data contained whether women participated in the labor force or not, the income of the women, whether they have children or not, and the region in Canada.</p>
+<div id="join-data" class="section level2">
+<h2>Join data</h2>
+<pre class="r"><code>library(tidyverse)
+library(dplyr)
+library(carData)
+head(Mroz)</code></pre>
+<pre><code>##   lfp k5 k618 age  wc hc       lwg    inc
+## 1 yes  1    0  32  no no 1.2101647 10.910
+## 2 yes  0    2  30  no no 0.3285041 19.500
+## 3 yes  1    3  35  no no 1.5141279 12.040
+## 4 yes  0    3  34  no no 0.0921151  6.800
+## 5 yes  1    2  31 yes no 1.5242802 20.100
+## 6 yes  0    0  54  no no 1.5564855  9.859</code></pre>
+<pre class="r"><code>head(Womenlf)</code></pre>
+<pre><code>##     partic hincome children  region
+## 1 not.work      15  present Ontario
+## 2 not.work      13  present Ontario
+## 3 not.work      45  present Ontario
+## 4 not.work      23  present Ontario
+## 5 not.work      19  present Ontario
+## 6 not.work       7  present Ontario</code></pre>
+<pre class="r"><code>Womenlf &lt;- Womenlf %&gt;% rename(c(income = &quot;hincome&quot;, particip = &quot;partic&quot;))
+Mroz &lt;- Mroz %&gt;% rename(c(particip = &quot;lfp&quot;))
+Womenlf &lt;- Womenlf %&gt;% mutate(particip = recode(particip, not.work = &quot;no&quot;, 
+    fulltime = &quot;yes&quot;, parttime = &quot;yes&quot;))
+joindata &lt;- left_join(Womenlf, Mroz)</code></pre>
+<p>I chose this join because both datasets had participation and income columns, and I wanted the join based on participation because the participation is non-numeric, and I thought it would be easier to visualize and look more organized. I used left_join because it is the most common one to use to this type of joins. It includes all rows in Mroz and Womenlf, and they are joined by participation and income. I chose Mroz data to be added to Womenlf data because Womenlf has more numerical variables.</p>
+</div>
+<div id="wrangling" class="section level2">
+<h2>Wrangling</h2>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% filter(children == &quot;present&quot;) %&gt;% arrange(income) %&gt;% 
+    head</code></pre>
+<pre><code>##   particip income children   region k5 k618 age  wc  hc       lwg    inc
+## 1       no      1  present Atlantic  0    1  49  no yes 0.8689480 21.025
+## 2       no      1  present Atlantic  2    0  30 yes yes 1.4018365 23.600
+## 3       no      1  present Atlantic  1    0  30  no yes 1.1174339 22.800
+## 4       no      1  present Atlantic  0    4  41  no yes 0.8318294 35.910
+## 5       no      1  present Atlantic  0    1  45  no yes 1.1690733 21.700
+## 6       no      1  present Atlantic  0    5  43  no yes 0.9426970 21.823</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% select(particip, income) %&gt;% arrange(desc(income)) %&gt;% 
+    head</code></pre>
+<pre><code>##   particip income
+## 1       no     45
+## 2       no     45
+## 3       no     45
+## 4       no     45
+## 5       no     45
+## 6       no     45</code></pre>
+<pre class="r"><code>joindata %&gt;% filter(children == &quot;absent&quot;) %&gt;% summarize(mean(income)) %&gt;% 
+    head</code></pre>
+<pre><code>##   mean(income)
+## 1     14.17752</code></pre>
+<pre class="r"><code>joindata %&gt;% filter(children == &quot;present&quot;) %&gt;% summarize(mean(income)) %&gt;% 
+    head</code></pre>
+<pre><code>##   mean(income)
+## 1     14.83113</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% summarize(sd(income))</code></pre>
+<pre><code>##   sd(income)
+## 1   7.214666</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% summarize(mean(k5))</code></pre>
+<pre><code>##    mean(k5)
+## 1 0.2580254</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% summarize(min(k618))</code></pre>
+<pre><code>##   min(k618)
+## 1         0</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% summarize(max(age))</code></pre>
+<pre><code>##   max(age)
+## 1       60</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% summarize(n_distinct(lwg))</code></pre>
+<pre><code>##   n_distinct(lwg)
+## 1             676</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% group_by(particip) %&gt;% summarize(mean(income))</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   particip `mean(income)`
+##   &lt;fct&gt;             &lt;dbl&gt;
+## 1 yes                13.6
+## 2 no                 15.6</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% group_by(region, particip) %&gt;% summarize(sd(k5))</code></pre>
+<pre><code>## # A tibble: 10 x 3
+## # Groups:   region [5]
+##    region   particip `sd(k5)`
+##    &lt;fct&gt;    &lt;fct&gt;       &lt;dbl&gt;
+##  1 Atlantic yes         0.392
+##  2 Atlantic no          0.636
+##  3 BC       yes         0.391
+##  4 BC       no          0.636
+##  5 Ontario  yes         0.391
+##  6 Ontario  no          0.636
+##  7 Prairie  yes         0.391
+##  8 Prairie  no          0.636
+##  9 Quebec   yes         0.391
+## 10 Quebec   no          0.636</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% group_by(children) %&gt;% summarize(max(k618))</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   children `max(k618)`
+##   &lt;fct&gt;          &lt;int&gt;
+## 1 absent             8
+## 2 present            8</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% group_by(particip) %&gt;% summarize(n_distinct(age))</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   particip `n_distinct(age)`
+##   &lt;fct&gt;                &lt;int&gt;
+## 1 yes                     31
+## 2 no                      31</code></pre>
+<pre class="r"><code>joindata %&gt;% na.omit %&gt;% group_by(region) %&gt;% summarize(max(lwg))</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   region   `max(lwg)`
+##   &lt;fct&gt;         &lt;dbl&gt;
+## 1 Atlantic       3.22
+## 2 BC             3.22
+## 3 Ontario        3.22
+## 4 Prairie        3.22
+## 5 Quebec         3.22</code></pre>
+<p>I omited the NAs to anazlyze the data. I grabbed women with children and arranged their income, and I was surprised by the fact that women with lower income both participated in labor force and had children. Also, I selected two columns, participation and income, and arranged that by descending income and found that the highest income belong to women who participated in labor force. Then, I filtered women with children and without children and summarized the mean income of both, which showed that women with children had higher income. The standard deviation of income was 5.28. Then, I grouped by participation, and the mean of the income was 15.41. The mean of having kids under 5 years old was 0.33, meaning that most women who participated in the survey did not have kids under 5 years old. Then, I grouped by region and participation, and the standard deviation of k5 was 0.67. The minimum amount of having kids between 6 years old and 18 years old was 0. Then, I grouped by children, and the max number of k618 was 4.The maximum age of the women was 60. Then I grouped by participation, and the distinct rows of age was 28. The number of distinct rows of log expected wage rate was 50. Then I grouped by region, and the maximum lgw was 2.28.</p>
+</div>
+<div id="correlation-matrix" class="section level2">
+<h2>Correlation Matrix</h2>
+<pre class="r"><code>joindata_onlynum &lt;- joindata %&gt;% na.omit %&gt;% select_if(is.numeric)
+eigen(cor(joindata_onlynum))</code></pre>
+<pre><code>## eigen() decomposition
+## $values
+## [1] 1.6435470 1.1367966 1.0102421 0.9384704 0.8420435 0.4289004
+## 
+## $vectors
+##             [,1]        [,2]        [,3]        [,4]       [,5]        [,6]
+## [1,] -0.01636535 -0.01874755  0.96712962 -0.08621389  0.2358746 -0.03116626
+## [2,] -0.54287479  0.21469938  0.07642900 -0.44598206 -0.4281861  0.52067879
+## [3,] -0.48821383 -0.14325909 -0.04463483  0.61574125  0.4194907  0.42897793
+## [4,]  0.67618793 -0.04739311  0.07065007  0.10870165 -0.1123375  0.71491019
+## [5,]  0.09559223  0.69961636 -0.15776307 -0.27504216  0.6232744  0.11131366
+## [6,]  0.01727447  0.66431949  0.16415242  0.57189653 -0.4289017 -0.14287366</code></pre>
+<p>I used eigen and cor to analyze the correlation between the numeric variables. Based on the correlation matrix, highest correlation is between age and log expected wage rate (lwg) with a value of 0.713, and there is no correlation between income and log expected wage rate with a value of 0.0098.</p>
+</div>
+<div id="visualizing-heatmap" class="section level2">
+<h2>Visualizing: heatmap</h2>
+<pre class="r"><code>library(ggplot2)
+joindata %&gt;% na.omit %&gt;% select_if(is.numeric) %&gt;% cor %&gt;% as.data.frame %&gt;% 
+    rownames_to_column %&gt;% pivot_longer(-1) %&gt;% ggplot(aes(rowname, 
+    name, fill = value, stat = &quot;summary&quot;)) + geom_tile() + geom_text(aes(label = round(value, 
+    2))) + xlab(&quot;&quot;) + ylab(&quot;&quot;) + coord_fixed()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>joindata %&gt;% ggplot(aes(x = particip, fill = children, stat = &quot;summary&quot;)) + 
+    geom_bar() + xlab(&quot;participation in labor force&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>joindata %&gt;% ggplot(aes(x = age, y = lwg)) + theme(legend.position = &quot;none&quot;) + 
+    geom_point(color = &quot;red&quot;) + geom_smooth(method = &quot;lm&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The heatmap showed highest negative correlation between k5 and age with -0.53. The k618 and age was the second highest correation with -0.52. Overall, the heatmap showed that there are not much correlation between the variables. The bargraph shows the difference of presence of children in women who participate in labor force and women who do not. The graph illustrates that many surveyed women who do not participate in labor force have children, and a little over half of the women who do participate in labor force do not have children. The scatterplot shows the relationship between age and lwg, the log expected wage rate. I predicted that as age increases, the log wage rate would increase as well, and the trend line shows a very small increase.</p>
+</div>
+<div id="dimensionality-reduction" class="section level2">
+<h2>Dimensionality Reduction</h2>
+<pre class="r"><code>## Princomp
+joindata_nums &lt;- joindata %&gt;% select_if(is.numeric) %&gt;% scale
+rownames(joindata_nums) &lt;- joindata$region
+joindata_pca &lt;- princomp(na.omit(joindata_nums), cor = TRUE)
+names(joindata_pca)</code></pre>
+<pre><code>## [1] &quot;sdev&quot;     &quot;loadings&quot; &quot;center&quot;   &quot;scale&quot;    &quot;n.obs&quot;    &quot;scores&quot;   &quot;call&quot;</code></pre>
+<pre class="r"><code>summary(joindata_pca, loadings = T)</code></pre>
+<pre><code>## Importance of components:
+##                           Comp.1    Comp.2    Comp.3    Comp.4    Comp.5
+## Standard deviation     1.2820090 1.0662067 1.0051080 0.9687468 0.9176293
+## Proportion of Variance 0.2739245 0.1894661 0.1683737 0.1564117 0.1403406
+## Cumulative Proportion  0.2739245 0.4633906 0.6317643 0.7881760 0.9285166
+##                           Comp.6
+## Standard deviation     0.6549049
+## Proportion of Variance 0.0714834
+## Cumulative Proportion  1.0000000
+## 
+## Loadings:
+##        Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6
+## income                0.967         0.236       
+## k5      0.543 -0.215         0.446 -0.428 -0.521
+## k618    0.488  0.143        -0.616  0.419 -0.429
+## age    -0.676               -0.109 -0.112 -0.715
+## lwg           -0.700 -0.158  0.275  0.623 -0.111
+## inc           -0.664  0.164 -0.572 -0.429  0.143</code></pre>
+</div>
+<div id="scree-plot" class="section level2">
+<h2>scree plot</h2>
+<pre class="r"><code>eigval &lt;- joindata_pca$sdev^2
+varprop = round(eigval/sum(eigval), 2)
+varprop</code></pre>
+<pre><code>## Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 
+##   0.27   0.19   0.17   0.16   0.14   0.07</code></pre>
+<pre class="r"><code>varpropvalues &lt;- c(0.36, 0.25, 0.19, 0.15, 0.05)
+
+library(ggplot2)
+ggplot() + geom_bar(aes(y = varpropvalues, x = 1:5), stat = &quot;identity&quot;) + 
+    xlab(&quot;&quot;) + geom_path(aes(y = varpropvalues, x = 1:5)) + geom_text(aes(x = 1:5, 
+    y = varpropvalues, label = round(varpropvalues, 2)), vjust = 1, 
+    col = &quot;white&quot;, size = 5) + scale_y_continuous(breaks = seq(0, 
+    0.6, 0.2), labels = scales::percent) + scale_x_continuous(breaks = 1:10)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>round(cumsum(eigval)/sum(eigval), 2)</code></pre>
+<pre><code>## Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 
+##   0.27   0.46   0.63   0.79   0.93   1.00</code></pre>
+<pre class="r"><code>eigval</code></pre>
+<pre><code>##    Comp.1    Comp.2    Comp.3    Comp.4    Comp.5    Comp.6 
+## 1.6435470 1.1367966 1.0102421 0.9384704 0.8420435 0.4289004</code></pre>
+<pre class="r"><code>summary(joindata_pca, loadings = T)</code></pre>
+<pre><code>## Importance of components:
+##                           Comp.1    Comp.2    Comp.3    Comp.4    Comp.5
+## Standard deviation     1.2820090 1.0662067 1.0051080 0.9687468 0.9176293
+## Proportion of Variance 0.2739245 0.1894661 0.1683737 0.1564117 0.1403406
+## Cumulative Proportion  0.2739245 0.4633906 0.6317643 0.7881760 0.9285166
+##                           Comp.6
+## Standard deviation     0.6549049
+## Proportion of Variance 0.0714834
+## Cumulative Proportion  1.0000000
+## 
+## Loadings:
+##        Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6
+## income                0.967         0.236       
+## k5      0.543 -0.215         0.446 -0.428 -0.521
+## k618    0.488  0.143        -0.616  0.419 -0.429
+## age    -0.676               -0.109 -0.112 -0.715
+## lwg           -0.700 -0.158  0.275  0.623 -0.111
+## inc           -0.664  0.164 -0.572 -0.429  0.143</code></pre>
+<pre class="r"><code>joindatadf &lt;- data.frame(PC1 = joindata_pca$scores[, 1], PC2 = joindata_pca$scores[, 
+    2])
+ggplot(joindatadf, aes(PC1, PC2)) + geom_point()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The scree plot shows that the biggest difference between the varprop is between PC1 and PC2 with a differnece of 11%, and eigval shows that PC1 and PC2 has eigenvalues that are greater than 1, and based on Kaiser's rule, those are the two PCs that are retained. Based on the eigenvectors, PC1's k5, k618, and age have similar magnitudes. A higher score on PC1 means more likely to have kids under the age of 5 and a lower age of the woman. PC2 is income vs lwg axis, so a higher score on PC2 means higher income and lwg. A higher score on PC3 means a lower lwg. A higher score on PC4 means high income. A higher score on PC5 means lower age and less likely to have kids who are below 5 years old and also between 6 and 18 years old. From plotting the first two PC scores, there is a gathering of points towards the middle of the graph, indicating a correlation between the two PCs.</p>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

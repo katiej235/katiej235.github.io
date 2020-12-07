@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on Chris Turner</title>
+    <link>/project/</link>
+    <description>Recent content in Projects on Chris Turner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Thu, 03 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SDS328 Project 2</title>
+      <link>/project/project2/</link>
+      <pubDate>Thu, 03 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project2/</guid>
+      <description>Data library(survival) tdata &amp;lt;- transplant %&amp;gt;% na.omit I will be using transplant data that has informations about the patients on the liver transplant waiting list. The data includes patient&#39;s sex, age, what year they entered the waiting list, futime (time from entry to final disposition), blood type(A,B,O,AB), and the event (final disposition: censored, death, ltx or withdraw). There are 815 observations total, but I will be removing all the observations with NAs, which comes down to 797 observations.</description>
+    </item>
+    
+    <item>
+      <title>SDS348 Project 1</title>
+      <link>/project/project1/</link>
+      <pubDate>Thu, 03 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project1/</guid>
+      <description>Introduction: The two data I have chosen both deal with women participating in the labor force from carData. I thought this would be interesting to see the factors that impact women&#39;s participation in labor force. I expect that not having children would increase the rate of labor force participation, and an increased participation when husband&#39;s income is lower.
+The Mroz data frame has 753 rows and 8 columns, and the observations, from the Panel Study of Income Dynamics, are married women.</description>
+    </item>
+    
+  </channel>
+</rss>
