@@ -6,7 +6,20 @@
     <description>Recent content in Posts on Chris Turner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Mon, 07 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python</title>
+      <link>/post/2020/12/10/python/</link>
+      <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2020/12/10/python/</guid>
+      <description>Intro to Python Python can be used as a calculator.
+3-2 ## 1 3.0/2 ## 1.5 Indexing on Python begins at 0th position.
+list1=[2,4,10,6,7,8,9,3] You can analyze and change the list in multiple ways.
+list1[3] ## 6 list1.append(9) list1 ## [2, 4, 10, 6, 7, 8, 9, 3, 9] list1[3] ## 6 Importing Numpy allows access to different functions and use different arrays on Python.
+import numpy as np x=np.</description>
+    </item>
+    
     <item>
       <title>Python</title>
       <link>/post/2020/12/07/test-post/</link>

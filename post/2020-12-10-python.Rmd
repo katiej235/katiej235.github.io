@@ -1,0 +1,77 @@
+---
+title: Python
+author: 'Katie Jang'
+date: '2020-12-10'
+slug: python
+categories: []
+tags: []
+description: ''
+---
+
+<center>
+![](/post/2020-12-07-test-post_files/python-code-application.jpeg){width=80%}
+</center>
+
+
+#Intro to Python
+
+Python can be used as a calculator. 
+```{python}
+3-2
+```
+
+```{python}
+3.0/2
+```
+
+Indexing on Python begins at 0th position. 
+```{python}
+list1=[2,4,10,6,7,8,9,3]
+```
+
+You can analyze and change the list in multiple ways. 
+```{python}
+list1[3]
+```
+
+```{python}
+list1.append(9)
+list1
+```
+
+```{python}
+list1[3]
+```
+
+Importing Numpy allows access to different functions and use different arrays on Python.  
+```{python}
+import numpy as np 
+x=np.array([10,20,30,40,50])
+x
+```
+
+```{python}
+#shape of the array 
+x.shape
+```
+
+```{python}
+#vectorized arithmetic
+print(x/5+19) 
+```
+
+#Reticulate 
+
+Reticulate allows you to import Python modules and call their functions directly from R. 
+```{R}
+library(reticulate)
+hi <- "Hello"
+```
+
+```{python}
+#you can access R defined objects with r
+hi="world"
+print(r.hi,hi) 
+```
+
+
