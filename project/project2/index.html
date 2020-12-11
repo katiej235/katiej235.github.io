@@ -130,38 +130,7 @@ summary.aov(man1) </code></pre>
 ##   &lt;fct&gt;       &lt;dbl&gt;        &lt;dbl&gt;          &lt;dbl&gt;
 ## 1 m            50.2        1995.           219.
 ## 2 f            50.9        1995.           208.</code></pre>
-<pre class="r"><code>#t-tests
-pairwise.t.test(tdata$year, tdata$sex, p.adj = &quot;none&quot;)</code></pre>
-<pre><code>## 
-##  Pairwise comparisons using t tests with pooled SD 
-## 
-## data:  tdata$year and tdata$sex 
-## 
-##   m     
-## f 0.0044
-## 
-## P value adjustment method: none</code></pre>
-<pre class="r"><code>pairwise.t.test(tdata$age, tdata$sex, p.adj = &quot;none&quot;)</code></pre>
-<pre><code>## 
-##  Pairwise comparisons using t tests with pooled SD 
-## 
-## data:  tdata$age and tdata$sex 
-## 
-##   m  
-## f 0.4
-## 
-## P value adjustment method: none</code></pre>
-<pre class="r"><code>pairwise.t.test(tdata$futime, tdata$sex, p.adj = &quot;none&quot;)</code></pre>
-<pre><code>## 
-##  Pairwise comparisons using t tests with pooled SD 
-## 
-## data:  tdata$futime and tdata$sex 
-## 
-##   m   
-## f 0.55
-## 
-## P value adjustment method: none</code></pre>
-<p>From the multivariate normality assumptions for each group, the p-values were less than 0.05 for both male and females, meaning that the normality assumptions are not met. A one-way MANOVA was conducted to determine the effect of the sex (male or female) on two dependent variables (entrance year,age, and futime). The one-way MANOVA showed that for at least one DV (age, year, futime), the mean is different for one sex with a p-value of 0.02313. Next, I ran a one-way ANOVA, which showed that for the year they enetered the waiting list, there is a significant difference between the sexes. The mean age of females is 50.86, and for males, it is 50.24. The mean year of enterance for females is 1995.903, and for males is 1995.436.The mean futime for females is 208.23, and for males, it is 219.26. I ran a t-test for year and sex, which resulted in a p-value of 0.0044. However, the t-test for age and sex and for futime and sex were insignificant. For alpha, I used 0.05/5 = 0.01 (1 MANOVA,1 ANOVA, 3 t-test). The t-test between year and sex, MANOVA, ANOVA results are still significant with the adjusted alpha value. The probability of a type-I error is 1-0.95^5 = 0.226219.</p>
+<p>From the multivariate normality assumptions for each group, the p-values were less than 0.05 for both male and females, meaning that the normality assumptions are not met. A one-way MANOVA was conducted to determine the effect of the sex (male or female) on two dependent variables (entrance year,age, and futime). The one-way MANOVA showed that for at least one DV (age, year, futime), the mean is different for one sex with a p-value of 0.02313. Next, I ran a one-way ANOVA, which showed that for the year they enetered the waiting list, there is a significant difference between the sexes. The mean age of females is 50.86, and for males, it is 50.24. The mean year of enterance for females is 1995.903, and for males is 1995.436.The mean futime for females is 208.23, and for males, it is 219.26. For alpha, I used 0.05/2 = 0.025 (1 MANOVA,1 ANOVA). The MANOVA and ANOVA results are still significant with the adjusted alpha value. The probability of a type-I error is 1-0.95^2 = 0.0975.</p>
 </div>
 <div id="randomization-test-f-statistic" class="section level2">
 <h2>Randomization Test (F-statistic)</h2>
@@ -203,14 +172,14 @@ SSW&lt;- new%&gt;%group_by(event)%&gt;%summarize(SSW=sum((age-mean(age))^2))%&gt
 summarize(sum(SSW))%&gt;%pull
 SSB&lt;- new%&gt;%mutate(mean=mean(age))%&gt;%group_by(event)%&gt;%mutate(groupmean=mean(age))%&gt;%
 summarize(SSB=sum((mean-groupmean)^2))%&gt;%summarize(sum(SSB))%&gt;%pull
-(SSB/2)/(SSW/794)
+(SSB/3)/(SSW/793)
 })
 
 mean(Fs&gt;F_obs) </code></pre>
-<pre><code>## [1] 0.2234</code></pre>
+<pre><code>## [1] 0.087</code></pre>
 <pre class="r"><code>hist(Fs,prob = T); abline(v=F_obs, col=&quot;red&quot;, add=T)</code></pre>
 <p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /> Null hypothesis: The event or the final disposition of the patient does not explain variation in age. Alternate hypothesis: The event or the final disposition of the patient does explain variation in age.</p>
-<p>The observed f-statistic was 2.233. The randomization test revealed a p-value of 0.2166, which means we fail to reject the null hypothesis, so the event or the final disposition of the patient does not explain variation in age. None of the 5000 F-statistics (Fs) generated under the null hypothesis were bigger than the actual F statistic (F_obs) of 2.233.</p>
+<p>The observed f-statistic was 2.233. The randomization test revealed a p-value of 0.0818, which means we fail to reject the null hypothesis, so the event or the final disposition of the patient does not explain variation in age. None of the 5000 F-statistics (Fs) generated under the null hypothesis were bigger than the actual F statistic (F_obs) of 2.233. Specifically, there were 0.0818*5000=409 of the null Fs were bigger than the observed F.</p>
 </div>
 <div id="linear-regression-model" class="section level2">
 <h2>Linear regression model</h2>
@@ -1122,7 +1091,7 @@ coef(fit5)
 ## Estimated SEs
 samp_distn%&gt;%t%&gt;%as.data.frame%&gt;%summarize_all(sd)</code></pre>
 <pre><code>##   (Intercept)     sexm    age_c sexm:age_c
-## 1    13.02049 17.63938 1.608315   1.857863</code></pre>
+## 1    12.78364 17.87177 1.569568   1.823882</code></pre>
 <p>The estimated SEs is 17.99 for sexm, 1.6060 for age, and 1.869 for the interaction between sexm and age_c. Compared to the original SEs and robust SEs, the bootstrap SEs are nearly the same. Each variable decreased very slightly like sexm, which went from SE of 18.28 to 17.99.</p>
 </div>
 <div id="logistic-regression-model" class="section level2">

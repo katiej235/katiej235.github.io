@@ -7,7 +7,7 @@
     <meta name="author" content="Katie Jang" />
     
     <link rel="shortcut icon" type="image/x-icon" href="../../../../../img/favicon.ico">
-    <title>Test Post</title>
+    <title>Python</title>
     <meta name="generator" content="Hugo 0.79.0" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../../../../../css/main.css" />
@@ -54,7 +54,7 @@
       <div class="container">
         <div class="blog-post">
           <h3>
-            <strong><a href="../../../../../post/2020/12/07/test-post/">Test Post</a></strong>
+            <strong><a href="../../../../../post/2020/12/07/test-post/">Python</a></strong>
           </h3>
         </div>
  
@@ -75,18 +75,47 @@
 
 
 <center>
-<img src="../../../../../post/2020-12-07-test-post_files/Me.png" style="width:50.0%" />
+<img src="../../../../../post/2020-12-07-test-post_files/python-code-application.jpeg" style="width:80.0%" />
 </center>
-<div id="heading-of-my-post" class="section level1">
-<h1>Heading of my post</h1>
-<p>Content of my post</p>
-<div id="subheading" class="section level2">
-<h2>subheading</h2>
-<p>more content</p>
-<pre class="r"><code>quakes &lt;- quakes</code></pre>
-<pre class="python"><code>r.quakes.mag.mean()</code></pre>
-<pre><code>## 4.6204000000000001</code></pre>
+<div id="intro-to-python" class="section level1">
+<h1>Intro to Python</h1>
+<p>Python can be used as a calculator.</p>
+<pre class="python"><code>3-2</code></pre>
+<pre><code>## 1</code></pre>
+<pre class="python"><code>3.0/2</code></pre>
+<pre><code>## 1.5</code></pre>
+<p>Indexing on Python begins at 0th position.</p>
+<pre class="python"><code>list1=[2,4,10,6,7,8,9,3]</code></pre>
+<p>You can analyze and change the list in multiple ways.</p>
+<pre class="python"><code>list1[3]</code></pre>
+<pre><code>## 6</code></pre>
+<pre class="python"><code>list1.append(9)
+list1</code></pre>
+<pre><code>## [2, 4, 10, 6, 7, 8, 9, 3, 9]</code></pre>
+<pre class="python"><code>list1[3]</code></pre>
+<pre><code>## 6</code></pre>
+<p>Importing Numpy allows access to different functions and use different arrays on Python.</p>
+<pre class="python"><code>import numpy as np 
+x=np.array([10,20,30,40,50])
+x</code></pre>
+<pre><code>## array([10, 20, 30, 40, 50])</code></pre>
+<pre class="python"><code>#shape of the array 
+x.shape</code></pre>
+<pre><code>## (5,)</code></pre>
+<pre class="python"><code>#vectorized arithmetic
+print(x/5+19) </code></pre>
+<pre><code>## [ 21.  23.  25.  27.  29.]</code></pre>
+<p>You can analyze datasets on Python. For example, this code puts out the mean magnitude in the quakes dataset.</p>
 </div>
+<div id="reticulate" class="section level1">
+<h1>Reticulate</h1>
+<p>Reticulate allows you to import Python modules and call their functions directly from R.</p>
+<pre class="r"><code>library(reticulate)
+hi &lt;- &quot;Hello&quot;</code></pre>
+<pre class="python"><code>#you can access R defined objects with r
+hi=&quot;world&quot;
+print(r.hi,hi) </code></pre>
+<pre><code>## Hello world</code></pre>
 </div>
 
             
