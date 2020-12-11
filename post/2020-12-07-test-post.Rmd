@@ -60,9 +60,6 @@ x.shape
 print(x/5+19) 
 ```
 
-You can analyze datasets on Python. For example, this code puts out the mean magnitude in the quakes dataset. 
-
-
 #Reticulate 
 
 Reticulate allows you to import Python modules and call their functions directly from R. 
